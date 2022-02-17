@@ -1,6 +1,9 @@
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.html.HTML;
 import javax.swing.text.html.HTMLEditorKit;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProcesaParrrafo  extends HTMLEditorKit.ParserCallback {
 
@@ -21,12 +24,34 @@ public class ProcesaParrrafo  extends HTMLEditorKit.ParserCallback {
         int n1 = 0;
         if( inParagraph ) {
             contador2++;
+            int u=0;
+            int i=0;
+            int r=0;
             String Parafo = new String(data);
+            Set<String> Stop = new HashSet<String>(Arrays.asList("stop-word-list.txt"));
+            Set<String> unicas = new HashSet<String>();
+            Set<String> duplicadas = new HashSet<String>();
             System.out.println("El parrafo numero "+contador2);
             String palabras[] = Parafo.split(" ");
             n1 += palabras.length;
-            System.out.println("Cuenta con una cantidad de "+n1+" palabras \n");
+            System.out.println("Cuenta con una cantidad de "+n1+" palabras");
+            for (String theWord : palabras) {
 
+                if (!Stop.contains(theWord)) {
+                    u++;
+                    if (!unicas.add(theWord)){
+                        duplicadas.add(theWord);
+                        r++;
+                    }
+                    unicas.removeAll(duplicadas);
+                }
+                i =u-r;
+                unicas.removeAll(duplicadas);
+
+            }
+            System.out.println("Parrafo despues de eliminar stopwords");
+            System.out.println(unicas);
+            System.out.println("Cuenta con una cantidad de "+i+" palabras uicas \n");
         }
 
     }
